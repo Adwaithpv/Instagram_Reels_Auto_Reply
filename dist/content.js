@@ -1006,6 +1006,8 @@ const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
 const SECURITY_DELAY = 2000; // 2 seconds for security-related delays
 let processedReels = new Set();
+let lastProcessedReelId = null;
+let lastReelCount = 0;
 // Debug logging function
 function debugLog(message, data) {
     console.log(`[Instagram Reels Auto-Reply] ${message}`, data || '');
@@ -1223,16 +1225,17 @@ async function processReels(containers) {
                     debugLog('No username found, skipping');
                     continue;
                 }
-                // Create a unique identifier for this reel
-                const reelId = `${username}_${Date.now()}`;
+                // Get the media URL for a more stable identifier
+                const mediaElement = container.querySelector('img[src*="cdninstagram.com"]') ||
+                    container.querySelector('video');
+                const mediaUrl = mediaElement?.getAttribute('src') || '';
+                // Create a stable identifier using username and media URL
+                const reelId = `${username}_${mediaUrl.split('/').pop()?.split('?')[0] || ''}`;
                 if (processedReels.has(reelId)) {
                     debugLog('Reel already processed, skipping');
                     continue;
                 }
                 // Get all possible content from the reel
-                const mediaElement = container.querySelector('img[src*="cdninstagram.com"]') ||
-                    container.querySelector('video');
-                const mediaUrl = mediaElement?.getAttribute('src') || '';
                 const description = mediaElement?.getAttribute('alt') ||
                     mediaElement?.getAttribute('aria-label') ||
                     '';
@@ -1246,6 +1249,7 @@ async function processReels(containers) {
                 debugLog('Reel description:', description);
                 debugLog('Reel text content:', textContent);
                 processedReels.add(reelId);
+                debugLog(`Added reel ${reelId} to processed set`);
                 if (!genAI) {
                     debugLog('Reinitializing Gemini API');
                     const apiKey = await new Promise((resolve) => {
@@ -1262,13 +1266,21 @@ async function processReels(containers) {
                             debugLog('Generating reply for reel');
                             const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
                             // Create a detailed prompt with all available information
-                            const prompt = `Generate a friendly and engaging reply for an Instagram reel from @${username}.
+                            const prompt = `Generate a short, natural reply to an Instagram reel that someone sent me in DMs. The reel is about:
 Content details:
 - Description: ${description}
 - Text content: ${textContent}
 - Media URL: ${mediaUrl}
 
-Please analyze this content and generate a personalized, engaging reply. Keep it casual and conversational. If the content is about writing, focus on that aspect. If it's a story or situation, respond accordingly. Make sure to include relevant emojis and keep the tone friendly.`;
+Strict Guidelines:
+- Keep it super brief (max 1-2 sentences or just a few words)
+- Make it sound like a casual, quick response I'd actually type
+- Sound like a real person, not a bot
+- Don't use fancy language or be overly enthusiastic. Keep it simple and natural.
+- Include relevant emoji only if it feels natural. Do not overuse emojis.
+- Do not repeat messages.
+- Output should just be the reply, nothing else. Do not give any sensitive information. Do not give any reply options.
+- Make it sound like I just watched it and I'm quickly responding`;
                             const result = await model.generateContent(prompt);
                             const response = await result.response;
                             const reply = response.text();
@@ -1360,15 +1372,28 @@ function detectReels() {
     try {
         // Look for containers that have the clip icon (indicating a reel)
         const reelContainers = document.querySelectorAll('div[role="button"]');
-        debugLog(`Found ${reelContainers.length} potential reel containers`);
-        if (reelContainers.length === 0) {
-            debugLog('No reel containers found');
-            return;
+        const actualReels = Array.from(reelContainers).filter(container => container.querySelector('svg[aria-label="Clip"]'));
+        const currentReelCount = actualReels.length;
+        debugLog(`Found ${currentReelCount} reels (previous count: ${lastReelCount})`);
+        // Check if we have any unprocessed reels
+        const hasUnprocessedReels = actualReels.some(container => {
+            const usernameLink = container.querySelector('a[href^="/"]');
+            const username = usernameLink?.getAttribute('href')?.replace('/', '') || '';
+            const mediaElement = container.querySelector('img[src*="cdninstagram.com"]') ||
+                container.querySelector('video');
+            const mediaUrl = mediaElement?.getAttribute('src') || '';
+            const reelId = `${username}_${mediaUrl.split('/').pop()?.split('?')[0] || ''}`;
+            return !processedReels.has(reelId);
+        });
+        // Process if we have more reels than before, or if we have unprocessed reels
+        if (currentReelCount > lastReelCount || hasUnprocessedReels) {
+            debugLog('New or unprocessed reels detected, processing...');
+            lastReelCount = currentReelCount;
+            processReels(actualReels);
         }
-        // Filter containers to only those that contain a clip icon
-        const actualReelContainers = Array.from(reelContainers).filter(container => container.querySelector('svg[aria-label="Clip"]'));
-        debugLog(`Found ${actualReelContainers.length} actual reels`);
-        processReels(actualReelContainers);
+        else {
+            debugLog('No new or unprocessed reels detected, skipping processing');
+        }
     }
     catch (error) {
         debugLog('Error detecting reels:', error);
