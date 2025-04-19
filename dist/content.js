@@ -1197,6 +1197,145 @@ async function sendMessage(message) {
         return false;
     }
 }
+// Function to safely get image data
+async function getImageData(imgElement) {
+    return new Promise((resolve) => {
+        try {
+            // Create a canvas with the same dimensions as the image
+            const canvas = document.createElement('canvas');
+            canvas.width = imgElement.naturalWidth;
+            canvas.height = imgElement.naturalHeight;
+            // Get the canvas context
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                debugLog('Could not get canvas context');
+                resolve(null);
+                return;
+            }
+            // Try to draw the image
+            try {
+                ctx.drawImage(imgElement, 0, 0);
+                // Get the image data as a blob
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        debugLog('Failed to create blob from canvas');
+                        resolve(null);
+                        return;
+                    }
+                    // Create a FileReader to read the blob
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const base64 = reader.result;
+                        resolve(base64);
+                    };
+                    reader.onerror = () => {
+                        debugLog('Failed to read blob');
+                        resolve(null);
+                    };
+                    reader.readAsDataURL(blob);
+                }, 'image/jpeg');
+            }
+            catch (error) {
+                debugLog('Failed to draw image to canvas:', error);
+                resolve(null);
+            }
+        }
+        catch (error) {
+            debugLog('Error in getImageData:', error);
+            resolve(null);
+        }
+    });
+}
+// Function to capture a frame from a video element
+async function captureVideoFrame(video) {
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            debugLog('Could not get canvas context');
+            return null;
+        }
+        // Draw the current frame to canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // Convert to base64
+        return canvas.toDataURL('image/jpeg', 0.8);
+    }
+    catch (error) {
+        debugLog('Error capturing video frame:', error);
+        return null;
+    }
+}
+// Function to play reel and capture frames
+async function playAndCaptureReel(container) {
+    try {
+        // Click the reel to start playback
+        const reelClickArea = container.querySelector('[id^="mid\\."] > div.html-div.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.xexx8yu.x4uap5.x18d9i69.xkhd6sd.x78zum5.xh8yej3 > div.x1cy8zhl.x78zum5.xdt5ytf.x193iq5w.x1n2onr6.x1kxipp6 > div > div > div > div > div > div > div.x1ey2m1c.xds687c.x17qophe.x10l6tqk.x13vifvy.x6m44yg');
+        if (!reelClickArea) {
+            debugLog('Could not find reel click area');
+            return [];
+        }
+        debugLog('Clicking reel to start playback');
+        reelClickArea.click();
+        // Wait for the video player to appear
+        await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
+        // Find the video element
+        const videoContainer = document.querySelector('body > div.x1n2onr6.xzkaem6 > div.x9f619.x1n2onr6.x1ja2u2z > div > div.x1uvtmcs.x4k7w5x.x1h91t0o.x1beo9mf.xaigb6o.x12ejxvf.x3igimt.xarpa2k.xedcshv.x1lytzrv.x1t2pt76.x7ja8zs.x1n2onr6.x1qrby5j.x1jfb8zj > div > div > div > div > div.xb88tzc.xw2csxc.x1odjw0f.x5fp0pe.x1qjc9v5.xjbqb8w.x1lcm9me.x1yr5g0i.xrt01vj.x10y3i5r.xr1yuqi.xkrivgy.x4ii5y1.x1gryazu.x15h9jz8.x47corl.xh8yej3.xir0mxb.x1juhsu6 > div > article > div > div._aatk._aatl');
+        const video = videoContainer?.querySelector('video');
+        if (!video) {
+            debugLog('Could not find video element');
+            return [];
+        }
+        debugLog('Found video element, waiting for playback');
+        // Wait for video to start playing
+        await new Promise((resolve) => {
+            const checkVideo = () => {
+                if (!video.paused && video.currentTime > 0) {
+                    resolve();
+                }
+                else {
+                    setTimeout(checkVideo, 100);
+                }
+            };
+            checkVideo();
+        });
+        debugLog('Video is playing, capturing frames');
+        // Capture frames at different points in the video
+        const frames = [];
+        const capturePoints = [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]; // Capture at 15%, 30%, 45%, 60%, 75%, and 90% of the video
+        for (const point of capturePoints) {
+            // Seek to the desired point
+            video.currentTime = video.duration * point;
+            // Wait for seek to complete
+            await new Promise((resolve) => {
+                video.onseeked = () => resolve();
+            });
+            // Capture frame
+            const frame = await captureVideoFrame(video);
+            if (frame) {
+                frames.push(frame);
+                debugLog(`Captured frame at ${Math.round(point * 100)}% of video`);
+            }
+        }
+        // Find and click the close button
+        const closeButton = document.querySelector('div.x6s0dn4.x78zum5.xdt5ytf.xl56j7k svg[aria-label="Close"]')?.closest('div[role="button"]');
+        if (closeButton) {
+            debugLog('Found close button, clicking it');
+            closeButton.click();
+            await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
+        }
+        else {
+            debugLog('Could not find close button, clicking outside instead');
+            document.body.click();
+        }
+        return frames;
+    }
+    catch (error) {
+        debugLog('Error in playAndCaptureReel:', error);
+        return [];
+    }
+}
 // Process reels with enhanced security checks
 async function processReels(containers) {
     if (!checkExtensionConnection() || isProcessing) {
@@ -1265,23 +1404,30 @@ async function processReels(containers) {
                         try {
                             debugLog('Generating reply for reel');
                             const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+                            // Capture frames from the reel
+                            debugLog('Attempting to capture frames from reel');
+                            const frames = await playAndCaptureReel(container);
                             // Create a detailed prompt with all available information
                             const prompt = `Generate a short, natural reply to an Instagram reel that someone sent me in DMs. The reel is about:
 Content details:
 - Description: ${description}
 - Text content: ${textContent}
-- Media URL: ${mediaUrl}
+${frames.length > 0 ? '- I can see multiple frames from the video above\n' : ''}
 
-Strict Guidelines:
-- Keep it super brief (max 1-2 sentences or just a few words)
-- Make it sound like a casual, quick response I'd actually type
-- Sound like a real person, not a bot
-- Don't use fancy language or be overly enthusiastic. Keep it simple and natural.
-- Include relevant emoji only if it feels natural. Do not overuse emojis.
-- Do not repeat messages.
-- Output should just be the reply, nothing else. Do not give any sensitive information. Do not give any reply options.
-- Make it sound like I just watched it and I'm quickly responding`;
-                            const result = await model.generateContent(prompt);
+
+Requirements:
+- Be specific to the content (mention something specific you notice)
+- Super brief (3-10 words max)
+- No generic phrases like "Haha nice!" or "That's cool!"
+- Do not be overly enthusiastic. Its not always that every reel is happy. Be chill.
+- Sound casual like a real text (lowercase ok, abbreviations ok)
+- Max 1 emoji if absolutely relevant, else do not use any emojis.
+- Reply as if I just watched it
+- Output should just be the reply, nothing else. Do not give any sensitive information. Do not give any reply options.`;
+                            const result = await model.generateContent([
+                                { text: prompt },
+                                ...frames.map(frame => ({ inlineData: { mimeType: "image/jpeg", data: frame.split(',')[1] } }))
+                            ]);
                             const response = await result.response;
                             const reply = response.text();
                             debugLog('Generated reply:', reply);
