@@ -1274,25 +1274,47 @@ Please analyze this content and generate a personalized, engaging reply. Keep it
                             const reply = response.text();
                             debugLog('Generated reply:', reply);
                             if (reply) {
-                                // Simulate hover over the reel container
-                                debugLog('Simulating hover over reel container');
-                                const mouseoverEvent = new MouseEvent('mouseover', {
-                                    bubbles: true,
-                                    cancelable: true,
-                                    view: window
-                                });
-                                container.dispatchEvent(mouseoverEvent);
-                                // Wait for the reply button to appear
-                                await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
-                                // Try to find and click the reply button
-                                const replyButton = container.querySelector('div[role="presentation"].html-div');
-                                if (replyButton) {
-                                    debugLog('Clicking reply button');
-                                    replyButton.click();
+                                // Find the hover area container
+                                const hoverArea = container.querySelector('div[class*="x1eb86dx"][class*="x78zum5"]');
+                                if (hoverArea) {
+                                    debugLog('Found hover area, simulating hover');
+                                    const mouseoverEvent = new MouseEvent('mouseover', {
+                                        bubbles: true,
+                                        cancelable: true,
+                                        view: window
+                                    });
+                                    hoverArea.dispatchEvent(mouseoverEvent);
+                                    // Wait for the reply button to appear
                                     await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
+                                    // Try to find and click the reply button using the exact selector path
+                                    const replyButton = document.querySelector('#mount_0_0_pB > div > div > div.x9f619.x1n2onr6.x1ja2u2z > div > div > div.x78zum5.xdt5ytf.x1t2pt76.x1n2onr6.x1ja2u2z.x10cihs4 > div.x9f619.xvbhtw8.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1uhb9sk.x1plvlek.xryxfnj.x1c4vz4f.x2lah0s.x1q0g3np.xqjyukv.x1qjc9v5.x1oa3qoh.x1qughib > div.x1gryazu.xh8yej3.x10o80wk.x14k21rp.x1v4esvl.x8vgawa > section > main > section > div > div > div > div.xjp7ctv > div > div.x9f619.x1n2onr6.x1ja2u2z.x78zum5.xdt5ytf.x193iq5w.xeuugli.x1r8uery.x1iyjqo2.xs83m0k > div > div > div.x9f619.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1iyjqo2.x2lwn1j.xeuugli.x1q0g3np.xqjyukv.x1qjc9v5.x1oa3qoh.x1nhvcw1.xcrg951.x6prxxf.x6ikm8r.x10wlt62.x1n2onr6.xh8yej3 > div > div.x78zum5.xdt5ytf.x1iyjqo2.x193iq5w.x2lwn1j.x1n2onr6 > div.x78zum5.x1r8uery.xdt5ytf.x1iyjqo2.x6ikm8r.x10wlt62 > div > div > div > div > div > div > div:nth-child(3) > div > div:nth-child(8) > div > div > div > div > div:nth-child(1) > div > div > div.html-div.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.xexx8yu.x4uap5.x1eb86dx.x78zum5.x1c4vz4f.x2lah0s.x18061mc.xjz4gdx > div > div > div > div > div:nth-child(2) > span > div > div > div > svg')?.closest('div[role="button"]');
+                                    if (replyButton) {
+                                        debugLog('Found reply button using exact selector, clicking it');
+                                        replyButton.click();
+                                        await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
+                                    }
+                                    else {
+                                        debugLog('Reply button not found using exact selector, trying alternative approach');
+                                        // Try finding the button by looking for the SVG with aria-label="Reply"
+                                        const replySvg = document.querySelector('svg[aria-label="Reply"]');
+                                        if (replySvg) {
+                                            const alternativeButton = replySvg.closest('div[role="button"]');
+                                            if (alternativeButton) {
+                                                debugLog('Found reply button using alternative selector, clicking it');
+                                                alternativeButton.click();
+                                                await new Promise(resolve => setTimeout(resolve, SECURITY_DELAY));
+                                            }
+                                            else {
+                                                debugLog('Could not find parent button for reply SVG');
+                                            }
+                                        }
+                                        else {
+                                            debugLog('Could not find reply SVG');
+                                        }
+                                    }
                                 }
                                 else {
-                                    debugLog('Reply button not found after hover');
+                                    debugLog('Hover area not found');
                                 }
                                 success = await sendMessage(reply);
                                 if (!success) {
