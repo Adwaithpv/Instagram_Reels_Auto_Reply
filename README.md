@@ -5,10 +5,20 @@ A Chrome extension that automatically detects Instagram reels in your chat messa
 ## Features
 
 - Automatically detects Instagram reels in your chat messages
-- Analyzes reel content using computer vision
+- Analyzes reel content using TensorFlow.js and COCO-SSD for object detection
 - Generates contextual replies using Google's Gemini AI
-- Simple and intuitive user interface
-- Secure storage of API keys
+- Modern React-based popup interface for configuration
+- Secure storage of API keys using Chrome's storage API
+- Real-time monitoring of Instagram chat messages
+
+## Tech Stack
+
+- React 18 for UI components
+- TypeScript for type safety
+- TensorFlow.js for computer vision
+- Google Gemini AI for natural language processing
+- Webpack for bundling
+- Styled Components for styling
 
 ## Installation
 
@@ -45,22 +55,9 @@ npm run build
 2. Navigate to any chat conversation
 3. When someone sends you a reel, the extension will:
    - Detect the reel automatically
-   - Analyze its content
-   - Generate a contextual reply
+   - Analyze its content using computer vision
+   - Generate a contextual reply using Gemini AI
    - Send the reply automatically
-
-## Requirements
-
-- Chrome browser
-- Google Gemini API key
-- Node.js v18 or higher
-- npm or yarn package manager
-
-## Privacy & Security
-
-- Your Gemini API key is stored securely in Chrome's storage
-- The extension only processes reels that are sent to you
-- No data is collected or shared with third parties
 
 ## Development
 
@@ -71,6 +68,27 @@ npm run watch
 ```
 
 This will rebuild the extension whenever you make changes to the source code.
+
+The project structure is organized as follows:
+- `src/` - Main source code
+  - `background/` - Background service worker
+  - `content/` - Content scripts for Instagram
+  - `popup/` - React-based popup UI
+  - `types/` - TypeScript type definitions
+
+## Requirements
+
+- Chrome browser
+- Google Gemini API key
+- Node.js v18 or higher
+- npm package manager
+
+## Privacy & Security
+
+- Your Gemini API key is stored securely in Chrome's storage
+- The extension only processes reels that are sent to you
+- No data is collected or shared with third parties
+- All processing happens locally in your browser
 
 ## License
 

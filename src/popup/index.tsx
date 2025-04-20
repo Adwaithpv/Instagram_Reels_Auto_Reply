@@ -40,11 +40,14 @@ const Popup: React.FC = () => {
       <h1 className={styles.title}>Instagram Reels Auto-Reply</h1>
       <div className={styles.toggleContainer}>
         <label className={styles.toggleLabel}>Enable Auto-Reply</label>
-        <input
-          type="checkbox"
-          checked={enabled}
-          onChange={handleToggle}
-        />
+        <label className={styles.toggleSwitch}>
+          <input
+            type="checkbox"
+            checked={enabled}
+            onChange={handleToggle}
+          />
+          <span className={styles.slider} />
+        </label>
       </div>
       <input
         className={styles.input}

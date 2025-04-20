@@ -22,61 +22,144 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, `.styles-module__popupContainer--K4k2q {
-  width: 300px;
-  padding: 20px;
+  width: 320px;
+  padding: 24px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .styles-module__title--MfgC2 {
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
   color: #262626;
+  text-align: center;
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .styles-module__toggleContainer--W64Cx {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 12px;
+  border: 1px solid #dbdbdb;
+  transition: all 0.2s ease;
+}
+
+.styles-module__toggleContainer--W64Cx:hover {
+  background-color: #f0f0f0;
 }
 
 .styles-module__toggleLabel--Hm2ki {
-  margin-right: 10px;
+  font-weight: 500;
   color: #262626;
+  font-size: 15px;
+}
+
+.styles-module__toggleSwitch--lFavR {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.styles-module__toggleSwitch--lFavR input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.styles-module__slider--OtvsX {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #dbdbdb;
+  transition: .4s;
+  border-radius: 24px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.styles-module__slider--OtvsX:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input:checked + .styles-module__slider--OtvsX {
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4);
+}
+
+input:checked + .styles-module__slider--OtvsX:before {
+  transform: translateX(26px);
 }
 
 .styles-module__input--gZQqP {
-  padding: 8px;
+  padding: 12px;
   border: 1px solid #dbdbdb;
-  border-radius: 4px;
-  margin-bottom: 15px;
+  border-radius: 8px;
+  margin-bottom: 16px;
   width: 100%;
+  font-size: 14px;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.styles-module__input--gZQqP:focus {
+  outline: none;
+  border-color: #0095f6;
+  background-color: #ffffff;
 }
 
 .styles-module__button--jganV {
-  background-color: #0095f6;
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4);
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
   width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 .styles-module__button--jganV:hover {
-  background-color: #0081d6;
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .styles-module__infoText--VWnK9 {
   font-size: 12px;
   color: #8e8e8e;
-  margin-top: 10px;
+  margin-top: 16px;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .styles-module__saveStatus--PNDvQ {
   color: #0095f6;
   font-size: 14px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-weight: 500;
   animation: styles-module__fadeInOut--YQVlM 2s ease-in-out;
 }
 
@@ -85,13 +168,15 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.styles-module__popupContainer--K4k2q 
   20% { opacity: 1; }
   80% { opacity: 1; }
   100% { opacity: 0; }
-} `, "",{"version":3,"sources":["webpack://./src/popup/styles.module.css"],"names":[],"mappings":"AAAA;EACE,YAAY;EACZ,aAAa;EACb,gGAAgG;AAClG;;AAEA;EACE,eAAe;EACf,mBAAmB;EACnB,cAAc;AAChB;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,mBAAmB;AACrB;;AAEA;EACE,kBAAkB;EAClB,cAAc;AAChB;;AAEA;EACE,YAAY;EACZ,yBAAyB;EACzB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,iBAAiB;EACjB,kBAAkB;EAClB,eAAe;EACf,WAAW;AACb;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,eAAe;EACf,cAAc;EACd,gBAAgB;AAClB;;AAEA;EACE,cAAc;EACd,eAAe;EACf,kBAAkB;EAClB,gBAAgB;EAChB,yDAAmC;AACrC;;AAEA;EACE,KAAK,UAAU,EAAE;EACjB,MAAM,UAAU,EAAE;EAClB,MAAM,UAAU,EAAE;EAClB,OAAO,UAAU,EAAE;AACrB","sourcesContent":[".popupContainer {\r\n  width: 300px;\r\n  padding: 20px;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\r\n}\r\n\r\n.title {\r\n  font-size: 18px;\r\n  margin-bottom: 20px;\r\n  color: #262626;\r\n}\r\n\r\n.toggleContainer {\r\n  display: flex;\r\n  align-items: center;\r\n  margin-bottom: 20px;\r\n}\r\n\r\n.toggleLabel {\r\n  margin-right: 10px;\r\n  color: #262626;\r\n}\r\n\r\n.input {\r\n  padding: 8px;\r\n  border: 1px solid #dbdbdb;\r\n  border-radius: 4px;\r\n  margin-bottom: 15px;\r\n  width: 100%;\r\n}\r\n\r\n.button {\r\n  background-color: #0095f6;\r\n  color: white;\r\n  border: none;\r\n  padding: 8px 16px;\r\n  border-radius: 4px;\r\n  cursor: pointer;\r\n  width: 100%;\r\n}\r\n\r\n.button:hover {\r\n  background-color: #0081d6;\r\n}\r\n\r\n.infoText {\r\n  font-size: 12px;\r\n  color: #8e8e8e;\r\n  margin-top: 10px;\r\n}\r\n\r\n.saveStatus {\r\n  color: #0095f6;\r\n  font-size: 14px;\r\n  text-align: center;\r\n  margin-top: 10px;\r\n  animation: fadeInOut 2s ease-in-out;\r\n}\r\n\r\n@keyframes fadeInOut {\r\n  0% { opacity: 0; }\r\n  20% { opacity: 1; }\r\n  80% { opacity: 1; }\r\n  100% { opacity: 0; }\r\n} "],"sourceRoot":""}]);
+} `, "",{"version":3,"sources":["webpack://./src/popup/styles.module.css"],"names":[],"mappings":"AAAA;EACE,YAAY;EACZ,aAAa;EACb,gGAAgG;EAChG,mBAAmB;EACnB,mBAAmB;EACnB,yCAAyC;AAC3C;;AAEA;EACE,eAAe;EACf,gBAAgB;EAChB,mBAAmB;EACnB,cAAc;EACd,kBAAkB;EAClB,wFAAwF;EACxF,6BAA6B;EAC7B,oCAAoC;EACpC,qBAAqB;AACvB;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,8BAA8B;EAC9B,mBAAmB;EACnB,aAAa;EACb,yBAAyB;EACzB,mBAAmB;EACnB,yBAAyB;EACzB,yBAAyB;AAC3B;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,gBAAgB;EAChB,cAAc;EACd,eAAe;AACjB;;AAEA;EACE,kBAAkB;EAClB,qBAAqB;EACrB,WAAW;EACX,YAAY;AACd;;AAEA;EACE,UAAU;EACV,QAAQ;EACR,SAAS;AACX;;AAEA;EACE,kBAAkB;EAClB,eAAe;EACf,MAAM;EACN,OAAO;EACP,QAAQ;EACR,SAAS;EACT,yBAAyB;EACzB,eAAe;EACf,mBAAmB;EACnB,8CAA8C;AAChD;;AAEA;EACE,kBAAkB;EAClB,WAAW;EACX,YAAY;EACZ,WAAW;EACX,SAAS;EACT,WAAW;EACX,uBAAuB;EACvB,eAAe;EACf,kBAAkB;EAClB,wCAAwC;AAC1C;;AAEA;EACE,6DAA6D;AAC/D;;AAEA;EACE,2BAA2B;AAC7B;;AAEA;EACE,aAAa;EACb,yBAAyB;EACzB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;EACX,eAAe;EACf,yBAAyB;EACzB,yBAAyB;AAC3B;;AAEA;EACE,aAAa;EACb,qBAAqB;EACrB,yBAAyB;AAC3B;;AAEA;EACE,6DAA6D;EAC7D,YAAY;EACZ,YAAY;EACZ,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;EACf,WAAW;EACX,gBAAgB;EAChB,eAAe;EACf,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,2BAA2B;AAC7B;;AAEA;EACE,eAAe;EACf,cAAc;EACd,gBAAgB;EAChB,kBAAkB;EAClB,gBAAgB;AAClB;;AAEA;EACE,cAAc;EACd,eAAe;EACf,kBAAkB;EAClB,gBAAgB;EAChB,gBAAgB;EAChB,yDAAmC;AACrC;;AAEA;EACE,KAAK,UAAU,EAAE;EACjB,MAAM,UAAU,EAAE;EAClB,MAAM,UAAU,EAAE;EAClB,OAAO,UAAU,EAAE;AACrB","sourcesContent":[".popupContainer {\r\n  width: 320px;\r\n  padding: 24px;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\r\n  background: #ffffff;\r\n  border-radius: 12px;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.title {\r\n  font-size: 20px;\r\n  font-weight: 600;\r\n  margin-bottom: 24px;\r\n  color: #262626;\r\n  text-align: center;\r\n  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);\r\n  -webkit-background-clip: text;\r\n  -webkit-text-fill-color: transparent;\r\n  background-clip: text;\r\n}\r\n\r\n.toggleContainer {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: space-between;\r\n  margin-bottom: 24px;\r\n  padding: 16px;\r\n  background-color: #fafafa;\r\n  border-radius: 12px;\r\n  border: 1px solid #dbdbdb;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n.toggleContainer:hover {\r\n  background-color: #f0f0f0;\r\n}\r\n\r\n.toggleLabel {\r\n  font-weight: 500;\r\n  color: #262626;\r\n  font-size: 15px;\r\n}\r\n\r\n.toggleSwitch {\r\n  position: relative;\r\n  display: inline-block;\r\n  width: 50px;\r\n  height: 24px;\r\n}\r\n\r\n.toggleSwitch input {\r\n  opacity: 0;\r\n  width: 0;\r\n  height: 0;\r\n}\r\n\r\n.slider {\r\n  position: absolute;\r\n  cursor: pointer;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  background-color: #dbdbdb;\r\n  transition: .4s;\r\n  border-radius: 24px;\r\n  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.slider:before {\r\n  position: absolute;\r\n  content: \"\";\r\n  height: 20px;\r\n  width: 20px;\r\n  left: 2px;\r\n  bottom: 2px;\r\n  background-color: white;\r\n  transition: .4s;\r\n  border-radius: 50%;\r\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\ninput:checked + .slider {\r\n  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4);\r\n}\r\n\r\ninput:checked + .slider:before {\r\n  transform: translateX(26px);\r\n}\r\n\r\n.input {\r\n  padding: 12px;\r\n  border: 1px solid #dbdbdb;\r\n  border-radius: 8px;\r\n  margin-bottom: 16px;\r\n  width: 100%;\r\n  font-size: 14px;\r\n  background-color: #fafafa;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n.input:focus {\r\n  outline: none;\r\n  border-color: #0095f6;\r\n  background-color: #ffffff;\r\n}\r\n\r\n.button {\r\n  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4);\r\n  color: white;\r\n  border: none;\r\n  padding: 12px 20px;\r\n  border-radius: 8px;\r\n  cursor: pointer;\r\n  width: 100%;\r\n  font-weight: 600;\r\n  font-size: 14px;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n.button:hover {\r\n  opacity: 0.9;\r\n  transform: translateY(-1px);\r\n}\r\n\r\n.infoText {\r\n  font-size: 12px;\r\n  color: #8e8e8e;\r\n  margin-top: 16px;\r\n  text-align: center;\r\n  line-height: 1.4;\r\n}\r\n\r\n.saveStatus {\r\n  color: #0095f6;\r\n  font-size: 14px;\r\n  text-align: center;\r\n  margin-top: 12px;\r\n  font-weight: 500;\r\n  animation: fadeInOut 2s ease-in-out;\r\n}\r\n\r\n@keyframes fadeInOut {\r\n  0% { opacity: 0; }\r\n  20% { opacity: 1; }\r\n  80% { opacity: 1; }\r\n  100% { opacity: 0; }\r\n} "],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"popupContainer": `styles-module__popupContainer--K4k2q`,
 	"title": `styles-module__title--MfgC2`,
 	"toggleContainer": `styles-module__toggleContainer--W64Cx`,
 	"toggleLabel": `styles-module__toggleLabel--Hm2ki`,
+	"toggleSwitch": `styles-module__toggleSwitch--lFavR`,
+	"slider": `styles-module__slider--OtvsX`,
 	"input": `styles-module__input--gZQqP`,
 	"button": `styles-module__button--jganV`,
 	"infoText": `styles-module__infoText--VWnK9`,
@@ -35458,7 +35543,7 @@ const Popup = () => {
             setTimeout(() => setSaveStatus(''), 2000);
         });
     };
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].popupContainer, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].title, children: "Instagram Reels Auto-Reply" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].toggleContainer, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].toggleLabel, children: "Enable Auto-Reply" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "checkbox", checked: enabled, onChange: handleToggle })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].input, type: "password", placeholder: "Enter Google Gemini API Key", value: apiKey, onChange: handleApiKeyChange }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].button, onClick: handleSave, children: "Save Settings" }), saveStatus && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].saveStatus, children: saveStatus }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].infoText, children: "Get your API key from the Google AI Studio: https://makersuite.google.com/app/apikey" })] }));
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].popupContainer, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].title, children: "Instagram Reels Auto-Reply" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].toggleContainer, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].toggleLabel, children: "Enable Auto-Reply" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("label", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].toggleSwitch, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "checkbox", checked: enabled, onChange: handleToggle }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].slider })] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].input, type: "password", placeholder: "Enter Google Gemini API Key", value: apiKey, onChange: handleApiKeyChange }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].button, onClick: handleSave, children: "Save Settings" }), saveStatus && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].saveStatus, children: saveStatus }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: _styles_module_css__WEBPACK_IMPORTED_MODULE_3__["default"].infoText, children: "Get your API key from the Google AI Studio: https://makersuite.google.com/app/apikey" })] }));
 };
 // Use the new React 18 createRoot API
 const container = document.getElementById('root');

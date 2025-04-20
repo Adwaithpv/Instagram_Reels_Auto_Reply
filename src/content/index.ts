@@ -570,34 +570,42 @@ function detectReels() {
   
   debugLog('Detecting reels');
   try {
-    // Look for containers that have the clip icon (indicating a reel)
-    const reelContainers = document.querySelectorAll('div[role="button"]');
-    const actualReels = Array.from(reelContainers).filter(container => 
-      container.querySelector('svg[aria-label="Clip"]')
-    );
-    const currentReelCount = actualReels.length;
-    
-    debugLog(`Found ${currentReelCount} reels (previous count: ${lastReelCount})`);
-    
-    // Check if we have any unprocessed reels
-    const hasUnprocessedReels = actualReels.some(container => {
-      const usernameLink = container.querySelector('a[href^="/"]');
-      const username = usernameLink?.getAttribute('href')?.replace('/', '') || '';
-      const mediaElement = container.querySelector('img[src*="cdninstagram.com"]') || 
+    // Check if extension is enabled
+    chrome.storage.sync.get(['enabled'], (result) => {
+      if (!result.enabled) {
+        debugLog('Extension is disabled, skipping reel detection');
+        return;
+      }
+
+      // Look for containers that have the clip icon (indicating a reel)
+      const reelContainers = document.querySelectorAll('div[role="button"]');
+      const actualReels = Array.from(reelContainers).filter(container => 
+        container.querySelector('svg[aria-label="Clip"]')
+      );
+      const currentReelCount = actualReels.length;
+      
+      debugLog(`Found ${currentReelCount} reels (previous count: ${lastReelCount})`);
+      
+      // Check if we have any unprocessed reels
+      const hasUnprocessedReels = actualReels.some(container => {
+        const usernameLink = container.querySelector('a[href^="/"]');
+        const username = usernameLink?.getAttribute('href')?.replace('/', '') || '';
+        const mediaElement = container.querySelector('img[src*="cdninstagram.com"]') || 
                          container.querySelector('video');
-      const mediaUrl = mediaElement?.getAttribute('src') || '';
-      const reelId = `${username}_${mediaUrl.split('/').pop()?.split('?')[0] || ''}`;
-      return !processedReels.has(reelId);
+        const mediaUrl = mediaElement?.getAttribute('src') || '';
+        const reelId = `${username}_${mediaUrl.split('/').pop()?.split('?')[0] || ''}`;
+        return !processedReels.has(reelId);
+      });
+      
+      // Process if we have more reels than before, or if we have unprocessed reels
+      if (currentReelCount > lastReelCount || hasUnprocessedReels) {
+        debugLog('New or unprocessed reels detected, processing...');
+        lastReelCount = currentReelCount;
+        processReels(actualReels as unknown as NodeListOf<Element>);
+      } else {
+        debugLog('No new or unprocessed reels detected, skipping processing');
+      }
     });
-    
-    // Process if we have more reels than before, or if we have unprocessed reels
-    if (currentReelCount > lastReelCount || hasUnprocessedReels) {
-      debugLog('New or unprocessed reels detected, processing...');
-      lastReelCount = currentReelCount;
-      processReels(actualReels as unknown as NodeListOf<Element>);
-    } else {
-      debugLog('No new or unprocessed reels detected, skipping processing');
-    }
   } catch (error) {
     debugLog('Error detecting reels:', error);
   }
